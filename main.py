@@ -40,8 +40,19 @@ def chat_socket(ws):
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    # return render_template('index.html')
+    return render_template('grid.html')
 
+@app.after_request
+def add_header(r):
+    """
+    Add headers to both force latest IE rendering engine or Chrome Frame,
+    and also to cache the rendered page for 10 minutes.
+    """
+    r.headers["Pragma"] = "no-cache"
+    r.headers["Expires"] = "0"
+    r.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate, public, max-age=0'
+    return r
 
 if __name__ == '__main__':
     print("""
