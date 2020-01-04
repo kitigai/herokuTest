@@ -6,6 +6,20 @@ class KeyMap:
     DOWN = (1,0)
     LEFT = (0,-1)
     RIGHT = (0,1)
+    def convert(self, action):
+      act = KeyMap.UP
+      action = action + 1
+      if action == 1:
+        act = KeyMap.UP
+      elif action == 2:
+        act = KeyMap.DOWN
+      elif action == 3:
+        act = KeyMap.LEFT
+      elif action == 4:
+        act = KeyMap.RIGHT
+      else:
+        act = KeyMap.UP
+      return act
 
 class MapObj:
     FREE = 0
@@ -49,8 +63,9 @@ class TileGame:
         self.map[self.coordinate] = MapObj.FREE
         self.map[nextCoorde] = MapObj.ME
         self.coordinate = nextCoorde
+        
 if __name__ == "__main__":
-    env = TileGame("../assets/grid2.csv")
+    env = TileGame("./static/grid.csv")
     observation = env.reset()
     np.set_printoptions(linewidth=200)
     print(observation)
@@ -65,8 +80,9 @@ if __name__ == "__main__":
         elif action == "4":
             act = KeyMap.RIGHT
         else:
-            print("invalid input")
-            continue
+            print("reset env")
+            env.reset()
+            act = KeyMap.UP
 
         observation, reward, done = env.step(act)
         print("reward : {} \n done : {}".format(reward, done))

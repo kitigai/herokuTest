@@ -16,25 +16,32 @@ from __future__ import print_function
 
 # [START gae_flex_websockets_app]
 from flask import Flask, render_template
-from flask_sockets import Sockets
+from flask_socketio import SocketIO, emit
 
 
 app = Flask(__name__)
-sockets = Sockets(app)
+sockets = SocketIO(app)
 
+@sockets.on('message', namespace = '/game')
+def game_socket(message):
+    emit('my response', {'data': message['data']})
 
-@sockets.route('/chat')
-def chat_socket(ws):
-    while not ws.closed:
-        message = ws.receive()
-        if message is None:  # message is "None" if the client has closed.
-            continue
-        # Send the message to all clients connected to this webserver
-        # process. (To support multiple processes or instances, an
-        # extra-instance storage or messaging system would be required.)
-        clients = ws.handler.server.clients.values()
-        for client in clients:
-            client.ws.send(message)
+@sockets.on('connect', namespace='/game')
+def test_connect():
+    emit('my response', {'data': 'Connected'})
+
+# @sockets.route('/chat')
+# def chat_socket(ws):
+#     while not ws.closed:
+#         message = ws.receive()
+#         if message is None:  # message is "None" if the client has closed.
+#             continue
+#         # Send the message to all clients connected to this webserver
+#         # process. (To support multiple processes or instances, an
+#         # extra-instance storage or messaging system would be required.)
+#         clients = ws.handler.server.clients.values()
+#         for client in clients:
+#             client.ws.send(message)
 # [END gae_flex_websockets_app]
 
 
