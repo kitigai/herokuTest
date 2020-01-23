@@ -8,15 +8,8 @@ class Learning:
     env = TileGame("../static/grid.csv")
     np.set_printoptions(linewidth=200)
 
-    goal_average_steps = 195
     max_number_of_steps = 200
-    last_time_steps = np.ndarray(0)
     iterations = 1000
-
-
-    #number_of_features = env.observation_space.shape[0]
-    last_time_steps = np.ndarray(0)
-    mean_steps = np.ndarray(0)
 
     scores, episodes = [], []
 
@@ -30,8 +23,6 @@ class Learning:
     qlearn = QLearn(action_size,
                     state_size, max_number_of_steps)
 
-    #special custom for MountainCar
-    myMemory = deque(maxlen=200)
 
     for e in range(iterations):
       state = env.reset()

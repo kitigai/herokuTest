@@ -15,7 +15,8 @@
 from __future__ import print_function
 
 # [START gae_flex_websockets_app]
-from flask import Flask, render_template, jsonfy, url_for
+import os
+from flask import Flask, render_template, jsonify, url_for
 from flask_socketio import SocketIO, emit, send
 from lib.learning import Learning
 from celery import Celery
@@ -25,10 +26,12 @@ from lib.tilegame import TileGame, KeyMap
 from lib.deepQ import QLearn
 from collections import deque
 
+url = os.environ.get('REDISCLOUD_URL', "redis://")
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
-app.config['CELERY_BROKER_URL'] = 'redis://localhost:6379/0'
-app.config['CELERY_RESULT_BACKEND'] = 'redis://localhost:6379/0'
+app.config['CELERY_BROKER_URL'] = url
+app.config['CELERY_RESULT_BACKEND'] = url
 
 sockets = SocketIO(app)
 celery = Celery(app.name, broker=app.config['CELERY_BROKER_URL'])
@@ -55,7 +58,7 @@ def game_discon(message):
 @app.route('/')
 def index():
     # return render_template('index.html')
-    return render_template('grid.html')
+    return render_template('title.html')
 
 @app.route('/start', methods=['POST'])
 def longtask():
