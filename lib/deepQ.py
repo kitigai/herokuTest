@@ -1,12 +1,11 @@
-
+from __future__ import absolute_import, division, print_function
 import sys
 import os
-import gym
 import numpy as np
 import random
 from collections import deque
 
-from __future__ import absolute_import, division, print_function
+
 
 # TensorFlow and tf.keras
 import tensorflow as tf
